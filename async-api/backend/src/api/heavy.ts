@@ -11,9 +11,9 @@ export default (uuidGenerator: () => string, queue: Queue) => {
     const requestID = uuidGenerator();
     const returnPath = `/heavy/response/${requestID}`;
 
-    const { number } = req.body;
+    const { waitFor } = req.body;
 
-    await queue.push(JSON.stringify({ requestID, number }));
+    await queue.push(JSON.stringify({ requestID, waitFor }));
 
     res.send({ requestID, returnPath });
   });

@@ -1,5 +1,6 @@
 import request from 'supertest';
 import api from './api';
+import heavyQueue from './queues/heavy';
 
 describe('Health Check', () => {
   test('return healthy', async () => {
@@ -10,7 +11,8 @@ describe('Health Check', () => {
 
 describe('Smoke tests', () => {
   test('has /heavy post route', async () => {
-    const result = await request(api).post('/heavy').send({ number: 100 });
+    await heavyQueue.build();
+    const result = await request(api).post('/heavy').send({ waitFor: 100 });
     expect(result.status).toEqual(200);
   });
 });

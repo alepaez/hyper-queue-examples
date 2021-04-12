@@ -31,7 +31,7 @@ describe('Heavy API', () => {
 
     const result = await request(api)
       .post('/heavy')
-      .send({ number: 100 });
+      .send({ waitFor: 100 });
 
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
@@ -51,8 +51,8 @@ describe('Heavy API', () => {
     const api = express();
     api.use(heavy(generateUUID, queue));
 
-    const body = { number: 100, notpermittedparam: 'h4ck3rl33t' };
-    const expectedBody = { requestID, number: 100 };
+    const body = { waitFor: 100, notpermittedparam: 'h4ck3rl33t' };
+    const expectedBody = { requestID, waitFor: 100 };
     const result = await request(api)
       .post('/heavy')
       .send(body);

@@ -3,15 +3,16 @@ import { v4 } from 'uuid';
 import hyperq from 'hyperq'
 
 import heavy from './api/heavy';
+import heavyQueue from './queues/heavy';
 
 const app = express();
-
-const queue = new hyperq.MemoryQueue();
 
 app.get('/healthz', (req: Request, res: Response, next: NextFunction) => {
   res.send("ok");
 });
 
-app.use(heavy(v4, queue));
+heavyQueue.build();
+
+app.use(heavy(v4, heavyQueue));
 
 export default app;
