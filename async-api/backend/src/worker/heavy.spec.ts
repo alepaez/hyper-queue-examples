@@ -37,6 +37,7 @@ describe('Heavy worker', () => {
 
     const response = await redisGet('responses-heavy-00000000000000000000000000000000');
     expect(response).toEqual(JSON.stringify({
+      status: 'finished',
       waited: '100ms',
     }));
   });
@@ -56,5 +57,21 @@ describe('Heavy worker', () => {
     await run;
 
     expect(expireSpy).toBeCalledWith('responses-heavy-00000000000000000000000000000000', 86400, expect.any(Function));
+  });
+
+  test('it removes msg from the queue after processing it', async () => {
+    const requestID = "00000000000000000000000000000000";
+    const queue = new MemoryQueue();
+    const msgBody = { requestID, waitFor: 100 };
+
+    await queue.push(JSON.stringify(msgBody));
+
+    const worker: Worker = heavy(redisClient, queue);
+    const run = worker.run();
+    worker.exit();
+    await run;
+
+    const queueLength = queue.processingQueue.length;
+    expect(queueLength).toEqual(0);
   });
 });

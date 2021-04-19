@@ -15,7 +15,7 @@ export default (redisClient: RedisClient, queue: Queue): Worker => {
 
     await sleep(waitFor);
     const responseKey = `responses-heavy-${requestID}`
-    await redisSet(responseKey, JSON.stringify({ waited: `${waitFor}ms` }));
+    await redisSet(responseKey, JSON.stringify({ status: 'finished', waited: `${waitFor}ms` }));
     await redisExpire(responseKey, 86400);
 
     await message.delete();
