@@ -3,15 +3,13 @@ import { v4 } from 'uuid';
 import hyperq from 'hyperq'
 import redis, { RedisClient, ClientOpts } from 'redis';
 
+import config from './config';
+
 import heavy from './api/heavy';
 import heavyQueue from './queues/heavy';
 
-const redisOptions: ClientOpts = {
-  host: "localhost",
-  port: 6379,
-  db: 0,
-}
-const redisClient: RedisClient = redis.createClient(redisOptions);
+const redisConfig: ClientOpts = config?.redis!;
+const redisClient: RedisClient = redis.createClient(redisConfig);
 
 const app = express();
 

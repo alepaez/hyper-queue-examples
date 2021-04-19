@@ -2,13 +2,10 @@ import heavy from './worker/heavy';
 import redis, { RedisClient, ClientOpts } from 'redis';
 
 import heavyQueue from './queues/heavy';
+import config from './config';
 
-const redisOptions: ClientOpts = {
-  host: "localhost",
-  port: 6379,
-  db: 0,
-}
-const redisClient: RedisClient = redis.createClient(redisOptions);
+const redisConfig: ClientOpts = config?.redis!;
+const redisClient: RedisClient = redis.createClient(redisConfig);
 
 const worker = heavy(redisClient, heavyQueue);
 

@@ -3,7 +3,7 @@ import { SQSQueue } from 'hyperq-sqs';
 
 const sqs = new SQSClient({
   region: "us-east-1",
-  endpoint: 'http://localhost:4566',
+  endpoint: process.env.SQS_ENDPOINT || 'http://localhost:4566',
 });
 
 export default new SQSQueue(sqs, 'heavy-api');
